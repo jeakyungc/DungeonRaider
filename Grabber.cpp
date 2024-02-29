@@ -15,7 +15,6 @@ UGrabber::UGrabber()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 // Called when the game starts
 void UGrabber::BeginPlay()
 {
@@ -30,8 +29,11 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	FVector HoldLocation = GetComponentLocation() + GetForwardVector() * HoldDistance;
-	PhysicsHandle->SetTargetLocationAndRotation(HoldLocation, GetComponentRotation());
+	if(PhysicsHandle != nullptr)
+	{
+		FVector HoldLocation = GetComponentLocation() + GetForwardVector() * HoldDistance;
+		PhysicsHandle->SetTargetLocationAndRotation(HoldLocation, GetComponentRotation());
+	}
 }
 
 void UGrabber::Grab()
@@ -43,13 +45,9 @@ void UGrabber::Grab()
 	FVector Start = GetComponentLocation();
 	FVector End = Start + GetForwardVector() * MaxDistance;
 
-	// Drawing Debug Objects
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
-	DrawDebugSphere(GetWorld(), End, 10, 10, FColor::Blue, false, 5);
-
 	// Sweeping
 	FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(Radius);  // Set sweeping shape as sphere(r=100)
-	
+
 	// Sweep and fill OutHitResult struct
 	struct FHitResult OutHitResult;
 	bool b_hasHit = GetWorld()->SweepSingleByChannel(
@@ -61,20 +59,26 @@ void UGrabber::Grab()
 	);
 	
 	if(b_hasHit){
+		UPrimitiveComponent* HitComponent = OutHitResult.GetComponent();
+		HitComponent->WakeAllRigidBodies();
+
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
-			OutHitResult.GetComponent(),  //UPremitiveComponent
+			HitComponent,  // UPremitiveComponent
 			NAME_None,  // bone : for skelatal mesh
 			OutHitResult.ImpactPoint,
-			OutHitResult.GetComponent()->GetComponentRotation()
+			GetComponentRotation()  // Rotation of Grabber SceneComponent.
 		);
 	}
 	else
 	{
-		UE_LOG(LogTemp, Display, TEXT("Can Grab : None"));
+		UE_LOG(LogTemp, Display, TEXT("None"));
 	}
 }
 
 void UGrabber::Release()
 {
-	UE_LOG(LogTemp, Display, TEXT("RELEASED"));
+	if(PhysicsHandle->GetGrabbedComponent())
+	{
+		PhysicsHandle->ReleaseComponent();
+	}
 }

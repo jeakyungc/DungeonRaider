@@ -19,9 +19,9 @@ public:
 private:
 	//FRotator CameraRotation;
 	UPROPERTY(EditAnywhere, Category="Grab")
-	float MaxDistance = 400;
+	float MaxDistance = 200;
 	UPROPERTY(EditAnywhere, Category="Grab")
-	float Radius = 100;
+	float Radius = 50;
 	UPROPERTY(EditAnywhere, Category="Grab")
 	float HoldDistance = 200;
 
@@ -29,7 +29,7 @@ private:
 	void Grab();
 	UFUNCTION(BlueprintCallable)
 	void Release();
-	
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -37,5 +37,6 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
 	
 };
