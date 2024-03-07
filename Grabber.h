@@ -30,6 +30,7 @@ private:
 	UFUNCTION(BlueprintCallable)
 	void Release();
 
+	bool GetGrabbableInReach(struct FHitResult& OutHitResult) const;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

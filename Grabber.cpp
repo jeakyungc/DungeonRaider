@@ -41,31 +41,15 @@ void UGrabber::Grab()
 	// Early return : Double check for null pointer exception of PhysicsHandle
 	if(!PhysicsHandle) return;
 
-	// Set sweeping range Fvector
-	FVector Start = GetComponentLocation();
-	FVector End = Start + GetForwardVector() * MaxDistance;
-
-	// Sweeping
-	FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(Radius);  // Set sweeping shape as sphere(r=100)
-
-	// Sweep and fill OutHitResult struct
-	struct FHitResult OutHitResult;
-	bool b_hasHit = GetWorld()->SweepSingleByChannel(
-		OutHitResult,
-		Start, End,
-		FQuat::Identity,
-		ECC_GameTraceChannel2,
-		CollisionSphere
-	);
-	
-	if(b_hasHit){
-		UPrimitiveComponent* HitComponent = OutHitResult.GetComponent();
+	struct FHitResult HitResult;
+	if(GetGrabbableInReach(HitResult)){
+		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		HitComponent->WakeAllRigidBodies();
 
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
 			HitComponent,  // UPremitiveComponent
 			NAME_None,  // bone : for skelatal mesh
-			OutHitResult.ImpactPoint,
+			HitResult.ImpactPoint,
 			GetComponentRotation()  // Rotation of Grabber SceneComponent.
 		);
 	}
@@ -81,4 +65,23 @@ void UGrabber::Release()
 	{
 		PhysicsHandle->ReleaseComponent();
 	}
+}
+
+bool UGrabber::GetGrabbableInReach(struct FHitResult& OutHitResult) const
+{
+	// Set sweeping range Fvector
+	FVector Start = GetComponentLocation();
+	FVector End = Start + GetForwardVector() * MaxDistance;
+
+	// Sweeping
+	FCollisionShape CollisionSphere = FCollisionShape::MakeSphere(Radius);  // Set sweeping shape as sphere(r=100)
+
+	// Sweep and fill OutHitResult struct, return boolean value
+	return GetWorld()->SweepSingleByChannel(
+		OutHitResult,
+		Start, End,
+		FQuat::Identity,
+		ECC_GameTraceChannel2,
+		CollisionSphere
+	);
 }
