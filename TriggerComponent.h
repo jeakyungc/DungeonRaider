@@ -15,7 +15,11 @@ class DUNGEONRAIDER_API UTriggerComponent : public UBoxComponent
 	GENERATED_BODY()
 public:
 	UTriggerComponent();
-	
+private:
+	UPROPERTY(EditAnywhere)
+	FName ActorTagName;
+
+	AActor* GetKeyActor() const;
 protected:
 	virtual void BeginPlay() override;
 

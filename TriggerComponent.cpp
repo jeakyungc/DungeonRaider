@@ -17,5 +17,17 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	UE_LOG(LogTemp, Display, TEXT("Trigger Component Ticking"));
+	if(AActor* KeyActor = GetKeyActor()) UE_LOG(LogTemp, Display, TEXT("%s"), *(KeyActor->GetActorNameOrLabel()))
+	else UE_LOG(LogTemp, Display, TEXT("RElocking"));
+}
+
+AActor* UTriggerComponent::GetKeyActor() const
+{
+	TArray<AActor*> OverlappingActors;  // Out parameter
+	GetOverlappingActors(OverlappingActors);
+
+	if(OverlappingActors.Num() < 1) return nullptr;
+	if(OverlappingActors[0]->ActorHasTag(ActorTagName)) return OverlappingActors[0];
+	
+	return nullptr;
 }
