@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
+#include "Mover.h"
 #include "TriggerComponent.generated.h"
 
 /**
@@ -18,8 +19,12 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	FName ActorTagName;
-
 	AActor* GetKeyActor() const;
+	UMover* Mover;
+
+	UFUNCTION(BlueprintCallable)
+	void SetMover(UMover* Mover);
+
 protected:
 	virtual void BeginPlay() override;
 

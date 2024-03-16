@@ -13,17 +13,26 @@ class DUNGEONRAIDER_API UMover : public UActorComponent
 {
 	GENERATED_BODY()
 private:
-	UPROPERTY(EditAnywhere)FVector MoveOffset;
-	UPROPERTY(EditAnywhere) float MoveTime = 4;
-	UPROPERTY(EditAnywhere) bool b_ShouldMove = false;
+	//Mesh Mover
+	//UPROPERTY(EditAnywhere) FVector MoveOffset;
+	//UPROPERTY(EditAnywhere) float MoveTime = 4;
+	//FVector OriginalLocation;
 
-	FVector OriginalLocation;
+	//Mesh Rotator
+	UPROPERTY(EditAnywhere) FRotator TargetRotation;
+	UPROPERTY(EditAnywhere) float Speed;
+	
+	bool b_ShouldMove = false;
+	UStaticMeshComponent* LDoor;
+	UStaticMeshComponent* RDoor;
 
 public:	
 	// Sets default values for this component's properties
 	UMover();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	void SetShouldMove(bool b_ShouldMove);
 
 protected:
 	// Called when the game starts
@@ -31,4 +40,5 @@ protected:
 
 private:
 	void MoveMesh(float DeltaTime);
+	void DoorMover(UStaticMeshComponent* HalfDoor, float DeltaTime);
 };

@@ -17,8 +17,8 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if(AActor* KeyActor = GetKeyActor()) UE_LOG(LogTemp, Display, TEXT("%s"), *(KeyActor->GetActorNameOrLabel()))
-	else UE_LOG(LogTemp, Display, TEXT("RElocking"));
+	//if(AActor* KeyActor = GetKeyActor()) UE_LOG(LogTemp, Display, TEXT("%s"), *(KeyActor->GetActorNameOrLabel()))
+	//else UE_LOG(LogTemp, Display, TEXT("RElocking"));
 }
 
 AActor* UTriggerComponent::GetKeyActor() const
@@ -30,4 +30,9 @@ AActor* UTriggerComponent::GetKeyActor() const
 	if(OverlappingActors[0]->ActorHasTag(ActorTagName)) return OverlappingActors[0];
 	
 	return nullptr;
+}
+
+void UTriggerComponent::SetMover(UMover* NewMover)
+{
+	Mover = NewMover;
 }

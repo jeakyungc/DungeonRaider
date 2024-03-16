@@ -6,11 +6,7 @@
 // Sets default values for this component's properties
 UMover::UMover()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-	
-	// ...
 }
 
 // Called when the game starts
@@ -18,23 +14,11 @@ void UMover::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// AActor* Owner = GetOwner();
-	// FString OwnerName = Owner->GetActorNameOrLabel();
-	
-	// TArray<UStaticMeshComponent*> Components;
-	// Owner->GetComponents<UStaticMeshComponent>(Components);
-
-	// for(UStaticMeshComponent* Component : Components)
-	// {
-	// 	FString ComponentName = Component->GetComp
-	// 	UE_LOG(LogTemp, Display, TEXT("Mover %s"), *ComponentName);
-	// }
-	// FVector OwnerLocation = Owner->GetActorLocation();
-	// FString OwnerLocationString = OwnerLocation.ToCompactString();
-	
-	//UE_LOG(LogTemp, Display, TEXT("Mover %s"), *OwnerName);
-
-	OriginalLocation = GetOwner()->GetActorLocation();	
+	// ! Addtional Check : SM is Door_Secrete
+	TArray<UStaticMeshComponent*> SMDoors;
+	GetOwner()->GetComponents<UStaticMeshComponent>(SMDoors);
+	LDoor = SMDoors[1];
+	RDoor = SMDoors[2];
 }
 
 // Called every frame
@@ -42,18 +26,29 @@ void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponent
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 		
-	MoveMesh(DeltaTime);
+	//MoveMesh(DeltaTime);
+
+	DoorMover(LDoor, DeltaTime);
+	DoorMover(RDoor, DeltaTime);
 }
 
 void UMover::MoveMesh(float DeltaTime)
 {
-	if(b_ShouldMove)
-	{
-		FVector CurrentLocation = GetOwner()->GetActorLocation();
-		FVector TargetLocation = OriginalLocation + MoveOffset;
-		float Speed = FVector::Distance(OriginalLocation, TargetLocation) / MoveTime;
+	if(!b_ShouldMove) return;
+	// FVector CurrentLocation = GetOwner()->GetActorLocation();
+	// FVector TargetLocation = OriginalLocation + MoveOffset;
+	// float Speed = FVector::Distance(OriginalLocation, TargetLocation) / MoveTime;
 
-		FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
-		GetOwner()->SetActorLocation(NewLocation);
-	}
+	// FVector NewLocation = FMath::VInterpConstantTo(CurrentLocation, TargetLocation, DeltaTime, Speed);
+	// GetOwner()->SetActorLocation(NewLocation);
+}
+
+void UMover::DoorMover(UStaticMeshComponent* HalfDoor, float DeltaTime)
+{
+	if(!b_ShouldMove) return;
+
+	FRotator CurrentRotation = HalfDoor->GetComponentRotation();
+	FRotator NewRotation = FMath::RInterpConstantTo(CurrentRotation, TargetRotation, DeltaTime, Speed);
+	
+	HalfDoor->SetWorldRotation(NewRotation);
 }
