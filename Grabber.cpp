@@ -46,9 +46,11 @@ void UGrabber::Grab()
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		HitComponent->WakeAllRigidBodies();
 
+		HitResult.GetActor()->Tags.Add("Grabbed");  // Adding Tag
+
 		PhysicsHandle->GrabComponentAtLocationWithRotation(
-			HitComponent,  // UPremitiveComponent
-			NAME_None,  // bone : for skelatal mesh
+			HitComponent,  	// UPremitiveComponent
+			NAME_None,  	// bone : for skelatal mesh
 			HitResult.ImpactPoint,
 			GetComponentRotation()  // Rotation of Grabber SceneComponent.
 		);
@@ -61,8 +63,9 @@ void UGrabber::Grab()
 
 void UGrabber::Release()
 {
-	if(PhysicsHandle->GetGrabbedComponent())
+	if(UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(PhysicsHandle->GetGrabbedComponent()))
 	{
+		Component->GetOwner()->Tags.Remove("Grabbed");  // Removing Tag
 		PhysicsHandle->ReleaseComponent();
 	}
 }
