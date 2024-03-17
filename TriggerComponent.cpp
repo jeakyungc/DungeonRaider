@@ -17,7 +17,14 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if(GetKeyActor()) Mover->SetShouldMove(true);
+	if(AActor* KeyActor = GetKeyActor())  // nullptr check here
+	{
+		// check rootComponent USceneComponent is UPrimitiveComponent. If not, returns nullptr
+		if(UPrimitiveComponent* RootComponent = Cast<UPrimitiveComponent>(KeyActor->GetRootComponent()))
+			RootComponent->SetSimulatePhysics(false);
+		KeyActor->AttachToComponent(this, FAttachmentTransformRules::KeepWorldTransform);
+		Mover->SetShouldMove(true);
+	}
 	else Mover->SetShouldMove(false);
 }
 
