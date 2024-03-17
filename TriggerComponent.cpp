@@ -5,7 +5,7 @@
 
 UTriggerComponent::UTriggerComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true; 
 }
 
 void UTriggerComponent::BeginPlay()
@@ -34,7 +34,9 @@ AActor* UTriggerComponent::GetKeyActor() const
 	GetOverlappingActors(OverlappingActors);
 
 	if(OverlappingActors.Num() < 1) return nullptr;
-	if(OverlappingActors[0]->ActorHasTag(ActorTagName)) return OverlappingActors[0];
+	
+	AActor* OverlappedActor = OverlappingActors[0];
+	if(OverlappedActor->ActorHasTag(ActorTagName) && !OverlappedActor->ActorHasTag("Grabbed")) return OverlappedActor;
 	
 	return nullptr;
 }
