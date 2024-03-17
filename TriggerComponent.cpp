@@ -17,7 +17,7 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if(AActor* KeyActor = GetKeyActor()) Mover->SetShouldMove(true);
+	if(GetKeyActor()) Mover->SetShouldMove(true);
 	else Mover->SetShouldMove(false);
 }
 
