@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "Mover.generated.h"
 
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class DUNGEONRAIDER_API UMover : public UActorComponent
 {
@@ -31,7 +29,7 @@ public:
 	UMover();
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
+
 	void SetShouldMove(bool b_ShouldMove);
 
 protected:

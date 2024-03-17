@@ -17,8 +17,8 @@ void UTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	//if(AActor* KeyActor = GetKeyActor()) UE_LOG(LogTemp, Display, TEXT("%s"), *(KeyActor->GetActorNameOrLabel()))
-	//else UE_LOG(LogTemp, Display, TEXT("RElocking"));
+	if(AActor* KeyActor = GetKeyActor()) Mover->SetShouldMove(true);
+	else Mover->SetShouldMove(false);
 }
 
 AActor* UTriggerComponent::GetKeyActor() const

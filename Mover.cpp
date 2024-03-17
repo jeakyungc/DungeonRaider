@@ -25,16 +25,15 @@ void UMover::BeginPlay()
 void UMover::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-		
-	//MoveMesh(DeltaTime);
 
+	//MoveMesh(DeltaTime);
 	DoorMover(LDoor, DeltaTime);
 	DoorMover(RDoor, DeltaTime);
 }
 
 void UMover::MoveMesh(float DeltaTime)
 {
-	if(!b_ShouldMove) return;
+	// if(!b_ShouldMove) return;
 	// FVector CurrentLocation = GetOwner()->GetActorLocation();
 	// FVector TargetLocation = OriginalLocation + MoveOffset;
 	// float Speed = FVector::Distance(OriginalLocation, TargetLocation) / MoveTime;
@@ -51,4 +50,9 @@ void UMover::DoorMover(UStaticMeshComponent* HalfDoor, float DeltaTime)
 	FRotator NewRotation = FMath::RInterpConstantTo(CurrentRotation, TargetRotation, DeltaTime, Speed);
 	
 	HalfDoor->SetWorldRotation(NewRotation);
+}
+
+void UMover::SetShouldMove(bool b_value)
+{
+	b_ShouldMove = b_value;
 }

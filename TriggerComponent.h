@@ -17,17 +17,16 @@ class DUNGEONRAIDER_API UTriggerComponent : public UBoxComponent
 public:
 	UTriggerComponent();
 private:
-	UPROPERTY(EditAnywhere)
-	FName ActorTagName;
+	UPROPERTY(EditAnywhere) FName ActorTagName;
 	AActor* GetKeyActor() const;
 	UMover* Mover;
-
-	UFUNCTION(BlueprintCallable)
-	void SetMover(UMover* Mover);
-
+	
 protected:
 	virtual void BeginPlay() override;
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	
+	UFUNCTION(BlueprintCallable)
+	void SetMover(UMover* Mover);
 };
